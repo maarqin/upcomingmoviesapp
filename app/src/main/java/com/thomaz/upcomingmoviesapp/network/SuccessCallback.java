@@ -1,13 +1,12 @@
 package com.thomaz.upcomingmoviesapp.network;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
 import android.view.View;
 import android.widget.Toast;
 
 import com.google.gson.GsonBuilder;
 import com.thomaz.upcomingmoviesapp.R;
-import com.thomaz.upcomingmoviesapp.common.IBaseCustomRecycleViewFragment;
+import com.thomaz.upcomingmoviesapp.common.IBaseCustomRecycleView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -16,6 +15,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -45,22 +45,20 @@ abstract class SuccessCallback<T> extends BaseCallBack<T> implements Callback<T>
 
     RESTfulClient rest = retrofit.create(RESTfulClient.class);
 
-    private IBaseCustomRecycleViewFragment iBaseCustomRecycleViewFragment;
+    private IBaseCustomRecycleView iBaseCustomRecycleView;
 
-    public SuccessCallback(Activity activity, IBaseCustomRecycleViewFragment iBaseCustomRecycleViewFragment) {
+    public SuccessCallback(Activity activity, IBaseCustomRecycleView iBaseCustomRecycleView) {
         this(activity);
 
-        this.iBaseCustomRecycleViewFragment = iBaseCustomRecycleViewFragment;
+        this.iBaseCustomRecycleView = iBaseCustomRecycleView;
 
-        iBaseCustomRecycleViewFragment.getProgressBar().setVisibility(View.VISIBLE);
-        iBaseCustomRecycleViewFragment.getTextView().setVisibility(View.GONE);
+        iBaseCustomRecycleView.getProgressBar().setVisibility(View.VISIBLE);
+        iBaseCustomRecycleView.getTextView().setVisibility(View.GONE);
     }
 
     public SuccessCallback(Activity activity) {
         this.activity = activity;
     }
-
-
 
     @Override
     public void onResponse(Call<T> call, Response<T> response) {
@@ -74,8 +72,10 @@ abstract class SuccessCallback<T> extends BaseCallBack<T> implements Callback<T>
             case HttpURLConnection.HTTP_PARTIAL :
                 onSuccess(response);
 
-                if( iBaseCustomRecycleViewFragment != null ) {
-                    ctrViewsOnSuccess(((List) response.body()).size() > 0);
+                if( iBaseCustomRecycleView != null ) {
+                    Result<ArrayList<T>> result = (Result) response.body();
+
+                    ctrViewsOnSuccess(!result.getResult().isEmpty());
                 }
                 break;
             case 422 :
@@ -125,11 +125,11 @@ abstract class SuccessCallback<T> extends BaseCallBack<T> implements Callback<T>
     @Override
     public void onFailureValidation(Response<T> response) {
         try {
-            JSONArray array = new JSONArray(response.errorBody().string());
-            if( array.length() > 0 ) {
-                JSONObject object = array.getJSONObject(0);
+            JSONObject object = new JSONObject(response.errorBody().string());
+            JSONArray errors = object.getJSONArray("errors");
 
-                Toast.makeText(activity, object.getString("message"), Toast.LENGTH_SHORT).show();
+            for (int i = 0; i < errors.length(); i++) {
+                Toast.makeText(activity, String.valueOf(errors.get(i)), Toast.LENGTH_SHORT).show();
             }
         } catch (IOException | JSONException e) {
             e.printStackTrace();
@@ -141,14 +141,14 @@ abstract class SuccessCallback<T> extends BaseCallBack<T> implements Callback<T>
      */
     private void ctrViewsOnSuccess(boolean moreThanOne) {
 
-        iBaseCustomRecycleViewFragment.getProgressBar().setVisibility(View.GONE);
+        iBaseCustomRecycleView.getProgressBar().setVisibility(View.GONE);
 
         if( moreThanOne ) {
-            iBaseCustomRecycleViewFragment.getTextView().setVisibility(View.GONE);
-            iBaseCustomRecycleViewFragment.getRecyclerView().setVisibility(View.VISIBLE);
+            iBaseCustomRecycleView.getTextView().setVisibility(View.GONE);
+            iBaseCustomRecycleView.getRecyclerView().setVisibility(View.VISIBLE);
         } else {
-            iBaseCustomRecycleViewFragment.getTextView().setVisibility(View.VISIBLE);
-            iBaseCustomRecycleViewFragment.getRecyclerView().setVisibility(View.GONE);
+            iBaseCustomRecycleView.getTextView().setVisibility(View.VISIBLE);
+            iBaseCustomRecycleView.getRecyclerView().setVisibility(View.GONE);
         }
     }
 

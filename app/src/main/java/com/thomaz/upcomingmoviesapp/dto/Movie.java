@@ -1,15 +1,20 @@
 package com.thomaz.upcomingmoviesapp.dto;
 
+import android.support.annotation.NonNull;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.Locale;
 
 
 /**
  * Created by thomaz on 1/20/18.
  */
-public class Movie implements Serializable {
+public class Movie implements Serializable, Comparable<Movie> {
 
     @SerializedName("vote_count")
     private long voteCount;
@@ -105,7 +110,14 @@ public class Movie implements Serializable {
         return overview;
     }
 
-    public Date getReleaseDate() {
-        return releaseDate;
+    public String getReleaseDate() {
+        SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy", new Locale("pt", "br"));
+
+        return format.format(releaseDate);
+    }
+
+    @Override
+    public int compareTo(@NonNull Movie o) {
+        return releaseDate.compareTo(o.releaseDate);
     }
 }

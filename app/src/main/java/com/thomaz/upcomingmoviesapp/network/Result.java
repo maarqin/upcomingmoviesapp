@@ -13,7 +13,14 @@ public class Result<D> implements Serializable {
     @SerializedName("results")
     private D result;
 
+    @SerializedName("total_pages")
+    private int totalPages;
+
     public D getResult() {
         return result;
+    }
+
+    public int getTotalPages() {
+        return totalPages;
     }
 }

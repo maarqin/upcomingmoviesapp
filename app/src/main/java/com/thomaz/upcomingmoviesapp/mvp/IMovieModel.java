@@ -5,4 +5,5 @@ package com.thomaz.upcomingmoviesapp.mvp;
  */
 
 public interface IMovieModel {
+    void all(int page);
 }
