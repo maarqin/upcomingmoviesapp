@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">@color/colorIndianKhaki</color>
+    <color name="colorPrimaryDark">@color/colorBlack</color>
+    <color name="colorAccent">@color/colorNobel</color>
+
+    <color name="colorMineShaft">#202020</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorIndianKhaki">#C0B780</color>
+    <color name="colorNobel">#b6b6b6</color>
+</resources>

@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">UpcomingMoviesApp</string>
+    <string name="no_results_to_show">No results to show</string>
+    <string name="no_internet">No internet connection.</string>
+</resources>
