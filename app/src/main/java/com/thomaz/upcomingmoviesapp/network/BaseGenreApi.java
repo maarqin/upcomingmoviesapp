@@ -3,9 +3,7 @@ package com.thomaz.upcomingmoviesapp.network;
 import android.app.Activity;
 
 import com.google.gson.annotations.SerializedName;
-import com.thomaz.upcomingmoviesapp.common.IBaseCustomRecycleView;
 import com.thomaz.upcomingmoviesapp.dto.Genre;
-import com.thomaz.upcomingmoviesapp.dto.Movie;
 
 import java.io.Serializable;
 import java.util.ArrayList;
