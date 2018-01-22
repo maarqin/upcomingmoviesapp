@@ -3,7 +3,6 @@ package com.thomaz.upcomingmoviesapp.adapter;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,7 +10,6 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.thomaz.upcomingmoviesapp.R;
 import com.thomaz.upcomingmoviesapp.common.Constants;
-import com.thomaz.upcomingmoviesapp.dto.Genre;
 import com.thomaz.upcomingmoviesapp.dto.Movie;
 
 import java.util.List;

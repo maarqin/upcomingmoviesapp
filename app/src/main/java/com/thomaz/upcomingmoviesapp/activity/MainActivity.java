@@ -4,10 +4,10 @@ import android.app.Activity;
 import android.app.SearchManager;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
@@ -21,19 +21,14 @@ import android.widget.TextView;
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import com.thomaz.upcomingmoviesapp.R;
 import com.thomaz.upcomingmoviesapp.common.RecyclerItemClickListener;
-import com.thomaz.upcomingmoviesapp.dto.Genre;
 import com.thomaz.upcomingmoviesapp.mvp.genre.list.GenrePresenter;
 import com.thomaz.upcomingmoviesapp.mvp.genre.list.IGenrePresenter;
 import com.thomaz.upcomingmoviesapp.mvp.movie.list.IMoviePresenter;
 import com.thomaz.upcomingmoviesapp.mvp.movie.list.IMovieView;
 import com.thomaz.upcomingmoviesapp.mvp.movie.list.MoviePresenter;
-import com.thomaz.upcomingmoviesapp.network.BaseGenreApi;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Response;
 
 
 /**
