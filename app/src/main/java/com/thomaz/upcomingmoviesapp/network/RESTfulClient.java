@@ -19,5 +19,8 @@ public interface RESTfulClient {
     Call<Result<ArrayList<Movie>>> getMovies(@Query("api_key") String key,
                                              @Query("language") String lang,
                                              @Query("page") int page);
+    @GET("genre/movie/list")
+    Call<BaseGenreApi.Genres> getGenres(@Query("api_key") String key,
+                                        @Query("language") String lang);
 
 }

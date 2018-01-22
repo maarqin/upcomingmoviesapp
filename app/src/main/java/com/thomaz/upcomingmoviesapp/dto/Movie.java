@@ -6,7 +6,6 @@ import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
-import java.util.Comparator;
 import java.util.Date;
 import java.util.Locale;
 
@@ -44,7 +43,7 @@ public class Movie implements Serializable, Comparable<Movie> {
     private String originalTitle;
 
     @SerializedName("genre_ids")
-    private long[] genreIds;
+    private int[] genreIds;
 
     @SerializedName("backdrop_path")
     private String backdropPath;
@@ -57,6 +56,8 @@ public class Movie implements Serializable, Comparable<Movie> {
 
     @SerializedName("release_date")
     private Date releaseDate;
+
+    private String genres;
 
     public long getVoteCount() {
         return voteCount;
@@ -94,7 +95,7 @@ public class Movie implements Serializable, Comparable<Movie> {
         return originalTitle;
     }
 
-    public long[] getGenreIds() {
+    public int[] getGenreIds() {
         return genreIds;
     }
 
@@ -116,8 +117,24 @@ public class Movie implements Serializable, Comparable<Movie> {
         return format.format(releaseDate);
     }
 
+    public String getGenres() {
+        return genres;
+    }
+
+    public void setGenres(String genres) {
+        this.genres = genres;
+    }
+
     @Override
     public int compareTo(@NonNull Movie o) {
         return releaseDate.compareTo(o.releaseDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                '}';
     }
 }

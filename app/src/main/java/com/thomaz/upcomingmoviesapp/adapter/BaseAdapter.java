@@ -62,4 +62,7 @@ public abstract class BaseAdapter<T, VH extends RecyclerView.ViewHolder> extends
         notifyDataSetChanged();
     }
 
+    public List<T> getTList() {
+        return tList;
+    }
 }

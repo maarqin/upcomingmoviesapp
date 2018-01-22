@@ -14,17 +14,26 @@ import android.support.v7.widget.SearchView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.dgreenhalgh.android.simpleitemdecoration.linear.DividerItemDecoration;
 import com.thomaz.upcomingmoviesapp.R;
-import com.thomaz.upcomingmoviesapp.mvp.IMoviePresenter;
-import com.thomaz.upcomingmoviesapp.mvp.IMovieView;
-import com.thomaz.upcomingmoviesapp.mvp.MoviePresenter;
+import com.thomaz.upcomingmoviesapp.common.RecyclerItemClickListener;
+import com.thomaz.upcomingmoviesapp.dto.Genre;
+import com.thomaz.upcomingmoviesapp.mvp.genre.list.GenrePresenter;
+import com.thomaz.upcomingmoviesapp.mvp.genre.list.IGenrePresenter;
+import com.thomaz.upcomingmoviesapp.mvp.movie.list.IMoviePresenter;
+import com.thomaz.upcomingmoviesapp.mvp.movie.list.IMovieView;
+import com.thomaz.upcomingmoviesapp.mvp.movie.list.MoviePresenter;
+import com.thomaz.upcomingmoviesapp.network.BaseGenreApi;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import retrofit2.Response;
 
 
 /**
@@ -32,7 +41,11 @@ import butterknife.ButterKnife;
  */
 public class MainActivity extends AppCompatActivity implements
         IMovieView,
-        SwipeRefreshLayout.OnRefreshListener {
+        SwipeRefreshLayout.OnRefreshListener,
+        SearchView.OnQueryTextListener,
+        SearchView.OnCloseListener,
+        MenuItem.OnActionExpandListener,
+        RecyclerItemClickListener.OnItemClickListener {
 
     @BindView(R.id.list_simple_view)
     protected RecyclerView rvResults;
@@ -45,6 +58,7 @@ public class MainActivity extends AppCompatActivity implements
     protected SwipeRefreshLayout srLayout;
 
     private IMoviePresenter moviePresenter;
+    private IGenrePresenter genrePresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements
         rvResults.setLayoutManager(mLayoutManager);
         setDecorationLine(rvResults);
 
+        // add pagination into the list
         rvResults.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -66,7 +81,7 @@ public class MainActivity extends AppCompatActivity implements
                 int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
                 if (pastVisibleItems + visibleItemCount >= totalItemCount) {
 
-                    //End of list
+                    // on end of list, calls a request again
                     if (moviePresenter.getIsGetMoreItens()) {
                         moviePresenter.setIsLoading(true);
 
@@ -76,10 +91,14 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
+        rvResults.addOnItemTouchListener(new RecyclerItemClickListener(this, this));
+
         srLayout.setOnRefreshListener(this);
 
         moviePresenter = new MoviePresenter(this);
-        moviePresenter.all(MoviePresenter.FIRST_PAGE);
+        genrePresenter = new GenrePresenter(this, moviePresenter);
+
+        genrePresenter.all();
     }
 
     @Override
@@ -132,7 +151,41 @@ public class MainActivity extends AppCompatActivity implements
         }
         if (searchView != null) {
             searchView.setSearchableInfo(searchManager.getSearchableInfo(MainActivity.this.getComponentName()));
+            searchView.setOnQueryTextListener(this);
+            searchItem.setOnActionExpandListener(this);
         }
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        moviePresenter.onSearchMovie(query);
+        return true;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        return false;
+    }
+
+    @Override
+    public boolean onMenuItemActionExpand(MenuItem item) {
+        return true;
+    }
+
+    @Override
+    public boolean onMenuItemActionCollapse(MenuItem item) {
+        moviePresenter.resetDataList();
+        return true;
+    }
+
+    @Override
+    public boolean onClose() {
+        return false;
+    }
+
+    @Override
+    public void onItemClick(View view, int position) {
+        moviePresenter.openMovie(position);
     }
 }

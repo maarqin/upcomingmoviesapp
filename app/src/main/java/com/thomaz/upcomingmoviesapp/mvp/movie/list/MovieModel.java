@@ -1,4 +1,4 @@
-package com.thomaz.upcomingmoviesapp.mvp;
+package com.thomaz.upcomingmoviesapp.mvp.movie.list;
 
 import com.thomaz.upcomingmoviesapp.dto.Movie;
 import com.thomaz.upcomingmoviesapp.network.BaseMovieApi;
@@ -22,6 +22,7 @@ public class MovieModel implements IMovieModel {
     @Override
     public void all(int page) {
 
+        // instance a new request to get movie list
         new BaseMovieApi.All(
                 moviePresenter.getActivity(),
                 "en-US",

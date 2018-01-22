@@ -1,8 +1,10 @@
-package com.thomaz.upcomingmoviesapp.mvp;
+package com.thomaz.upcomingmoviesapp.mvp.movie.list;
 
 import android.app.Activity;
+import android.util.SparseArray;
 
 import com.thomaz.upcomingmoviesapp.common.IBaseCustomRecycleView;
+import com.thomaz.upcomingmoviesapp.dto.Genre;
 import com.thomaz.upcomingmoviesapp.dto.Movie;
 import com.thomaz.upcomingmoviesapp.network.Result;
 
@@ -28,4 +30,12 @@ public interface IMoviePresenter {
     boolean getIsGetMoreItens();
 
     void setIsLoading(boolean b);
+
+    void onSearchMovie(String query);
+
+    void resetDataList();
+
+    void openMovie(int position);
+
+    void setGenreMap(SparseArray<Genre> genreMap);
 }

@@ -3,6 +3,7 @@ package com.thomaz.upcomingmoviesapp.adapter;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseArray;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.thomaz.upcomingmoviesapp.R;
 import com.thomaz.upcomingmoviesapp.common.Constants;
+import com.thomaz.upcomingmoviesapp.dto.Genre;
 import com.thomaz.upcomingmoviesapp.dto.Movie;
 
 import java.util.List;
@@ -35,12 +37,20 @@ public class MovieAdapter<TPI> extends BaseAdapter<TPI, MovieAdapter.ViewHolder>
     public void onBindViewHolder(MovieAdapter.ViewHolder holder, int position) {
         Movie movie = (Movie) tList.get(position);
 
-        Glide.with(activity)
-                .load(String.format(new Locale("pt", "br"), "%s%s",
-                        Constants.BASE_URI_IMAGE, movie.getBackdropPath()))
-                .into(holder.ivMoviePic);
+        if( movie.getBackdropPath() != null ) {
+            holder.ivMoviePic.setVisibility(View.VISIBLE);
+            Glide.with(activity)
+                    .load(String.format(new Locale("pt", "br"), "%s%s",
+                            Constants.BASE_URI_IMAGE, movie.getBackdropPath()))
+                    .into(holder.ivMoviePic);
+        } else {
+            holder.ivMoviePic.setVisibility(View.INVISIBLE);
+        }
 
         holder.tvMovieName.setText(movie.getTitle());
+
+        holder.tvMovieGenre.setText(movie.getGenres());
+
         holder.tvMovieRelease.setText(movie.getReleaseDate());
     }
 
